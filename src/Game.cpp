@@ -11,6 +11,11 @@ int Game::cursor_pos_prev_x = 10;
 int Game::cursor_pos_prev_y = 10;
 
 Game::Game(Shader &prog) : shaderProgram(prog) {
+    world = new element *[WIDTH];
+    for (int i = 0; i < WIDTH; i++) {
+        world[i] = new element[HEIGHT];
+    }
+
 
     set_brush_size(5);
     for (int x = 0; x < WIDTH; x++) {
@@ -59,6 +64,13 @@ Game::Game(Shader &prog) : shaderProgram(prog) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, getPixelBuffer());
+}
+
+Game::~Game() {
+    for (int i = 0; i < WIDTH; ++i) {
+        delete[] world[i];
+    }
+    delete[] world;
 }
 
 void Game::MoveLikePowder(int x, int y) {

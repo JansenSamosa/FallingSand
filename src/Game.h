@@ -93,8 +93,8 @@ public:
     // game parameters
     static constexpr int WINDOW_WIDTH = 1600;
     static constexpr int WINDOW_HEIGHT = 900;
-    static constexpr int WIDTH =   (WINDOW_WIDTH/10)*8;
-    static constexpr int HEIGHT = (WINDOW_HEIGHT/10)*8;
+    static constexpr int WIDTH =   (WINDOW_WIDTH/10)*10;
+    static constexpr int HEIGHT = (WINDOW_HEIGHT/10)*10;
     static constexpr double TIMESTEP = 0.02;
 
     static int BRUSH_SIZE;
@@ -113,6 +113,8 @@ public:
     void Render();
     void brushElement(int x, int y, int radius, int ELEMENT_ID);
 
+    ~Game();
+
 private:
     // rendering data
     unsigned int gameTextureID{};
@@ -121,7 +123,7 @@ private:
 
     Shader shaderProgram;
 
-    element world[WIDTH][HEIGHT];
+    element** world;
     uint8_t buffer[WIDTH*HEIGHT*3];
 
     uint8_t gameTime = 0; // how many ticks have elapsed since game started
