@@ -88,8 +88,8 @@ class World {
 public:
     static constexpr int WINDOW_WIDTH = 1600;
     static constexpr int WINDOW_HEIGHT = 900;
-    static constexpr int WIDTH =   (WINDOW_WIDTH/10)*8;
-    static constexpr int HEIGHT = (WINDOW_HEIGHT/10)*8;
+    static constexpr int WIDTH =   (WINDOW_WIDTH/10)*10;
+    static constexpr int HEIGHT = (WINDOW_HEIGHT/10)*10;
     static int BRUSH_SIZE;
     static int cursor_pos_x;
     static int cursor_pos_y;

@@ -26,6 +26,7 @@ private:
     unsigned int renderPlaneID{}; // a VAO
     unsigned int VBO{};
     Shader shaderProgram;
+    std::uint8_t* buffer;
 
     std::uint8_t gameTime = 0; // how many ticks have elapsed since game started
 

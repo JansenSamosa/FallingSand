@@ -155,6 +155,7 @@ int World::worldIndex(int x, int y) {
     return y * WIDTH + x;
 }
 
+
 std::uint8_t * World::getWorldPixelBuffer() {
     for (int x = 0; x < WIDTH; x++) {
         for (int y = HEIGHT - 1; y >= 0; y--) {
