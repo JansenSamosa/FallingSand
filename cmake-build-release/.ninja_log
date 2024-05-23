@@ -1,0 +1,6 @@
+# ninja log v5
+2	446	1716389028179506049	CMakeFiles/FallingSand.dir/src/main.cpp.o	d75eea4d6458dbbb
+1	149	1716388860236518616	CMakeFiles/FallingSand.dir/src/glad.c.o	5e2bae0857b1a662
+1	420	1716388860508513737	CMakeFiles/FallingSand.dir/src/Shader.cpp.o	13327bd8a04be25c
+886	954	1716463034676233856	FallingSand	939d9fe27cfc1de8
+1	886	1716463034610234954	CMakeFiles/FallingSand.dir/src/Game.cpp.o	6985c23d32d18600
