@@ -328,76 +328,77 @@ void Game::Update() {
     for (int y = 0; y < HEIGHT; y++) {
         bool e = y % 2 == 0;
         for (int x = e ? 0 : WIDTH - 1; e ? x < WIDTH : x >= 0; e ? x++ : x--) {
-            if (world[x][y].updated) continue;
+            element& element = world[x][y];
+            if (element.updated) continue;
 
-            uint8_t curr = world[x][y].elementID;
+            uint8_t curr = element.elementID;
 
-            if (world[x][y].lifeTime <= 0) {
+            if (element.lifeTime <= 0) {
                 placeElement(x, y, AIR_ID);
             }
 
             switch (curr) {
                 case SAND_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsSand(x, y);
                 break;
                 case WATER_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsWater(x, y);
                 break;case OIL_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsOil(x, y);
                 break;
                 case DIRT_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsSand(x, y);
                 break;
                 case FIRE_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsFire(x, y);
                     break;
                 case WOODBURNING_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsBurningWood(x, y);
                     break;
                 case STEAM_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsSteam(x, y);
                     break;
                 case INFINITESOURCE_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsInfiniteSource(x, y);
                     break;
                 case PLANT_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsPlant(x, y);
                     break;
                 case ACID_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsAcid(x, y);
                     break;;
                 case LAVA_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsLava(x, y);
                     break;
                 case GUNPOWDER_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsGunpowder(x, y);
                     break;
                 case SALT_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsSalt(x, y);
                     break;
                 case SALTWATER_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsWater(x, y);
                     break;
                 case ACIDCLOUD_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsAcidCloud(x, y);
                     break;
                 case ROCK_ID:
-                    world[x][y].updated = true;
+                    element.updated = true;
                     UpdateAsRock(x, y);
                     break;
                 default:
