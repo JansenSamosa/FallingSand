@@ -39,8 +39,8 @@ double lastResize = 0;
 double RESIZE_SPEED = 0.05;
 
 int SELECTED_ELEMENT = SAND_ID;
-int* xCoord = &World::cursor_pos_x;
-int* yCoord = &World::cursor_pos_y;
+int* xCoord = &Game::cursor_pos_x;
+int* yCoord = &Game::cursor_pos_y;
 bool pressing = false;
 
 void processInput(GLFWwindow* window) {
@@ -100,17 +100,17 @@ void processInput(GLFWwindow* window) {
         SELECTED_ELEMENT = ACIDCLOUD_ID;
     }
 
-    int curSize = World::get_brush_size();
+    int curSize = Game::get_brush_size();
 
     if (glfwGetTime() - lastResize > RESIZE_SPEED) {
         if (glfwGetKey(window, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS) {
             curSize -= curSize * 0.1;
-            World::set_brush_size(max(curSize, 0));
+            Game::set_brush_size(max(curSize, 0));
             lastResize = glfwGetTime();
         }
         if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS) {
             curSize += max((int) (curSize * 0.2), 1);
-            World::set_brush_size(min(curSize, MAX_BRUSH_SIZE));
+            Game::set_brush_size(min(curSize, MAX_BRUSH_SIZE));
             lastResize = glfwGetTime();
         }
     }
@@ -119,31 +119,31 @@ void processInput(GLFWwindow* window) {
 }
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
-    int curSize = World::get_brush_size();
+    int curSize = Game::get_brush_size();
 
     if (yoffset < 0) {
         curSize -= curSize * 0.1;
-        World::set_brush_size(max(curSize, 0));
+        Game::set_brush_size(max(curSize, 0));
         lastResize = glfwGetTime();
     }
     if (yoffset > 0) {
         curSize += max((int) (curSize * 0.2), 1);
-        World::set_brush_size(min(curSize, MAX_BRUSH_SIZE));
+        Game::set_brush_size(min(curSize, MAX_BRUSH_SIZE));
         lastResize = glfwGetTime();
     }
 }
 void cursor_position_callback(GLFWwindow* window, double xPos, double yPos) {
-    World::cursor_pos_prev_x = *xCoord;
-    World::cursor_pos_prev_y = *yCoord;
+    Game::cursor_pos_prev_x = *xCoord;
+    Game::cursor_pos_prev_y = *yCoord;
 
     // flip yPos so that (0, 0) is on bottom left corder of window
-    yPos -= (double) World::WINDOW_HEIGHT / 2;
+    yPos -= (double) Game::WINDOW_HEIGHT / 2;
     yPos *= -1;
-    yPos += (double) World::WINDOW_HEIGHT / 2;
+    yPos += (double) Game::WINDOW_HEIGHT / 2;
 
     // scale positions to texture positions
-    xPos *= (double) World::WIDTH / World::WINDOW_WIDTH;
-    yPos *= (double) World::HEIGHT / World::WINDOW_HEIGHT;
+    xPos *= (double) Game::WIDTH / Game::WINDOW_WIDTH;
+    yPos *= (double) Game::HEIGHT / Game::WINDOW_HEIGHT;
 
     *xCoord = (int) xPos;
     *yCoord = (int) yPos;
@@ -157,8 +157,8 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    int width = World::WINDOW_WIDTH;
-    int height = World::WINDOW_HEIGHT;
+    int width = Game::WINDOW_WIDTH;
+    int height = Game::WINDOW_HEIGHT;
 
     GLFWwindow* window = glfwCreateWindow(width, height, "Falling Sand", NULL, NULL);
     if (window == nullptr) {
@@ -191,7 +191,7 @@ int main()
         processInput(window);
 
         if (pressing) {
-            game.brushElement(*xCoord, *yCoord, World::get_brush_size(), SELECTED_ELEMENT);
+            game.brushElement(*xCoord, *yCoord, Game::get_brush_size(), SELECTED_ELEMENT);
         }
 
 
