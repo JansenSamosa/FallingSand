@@ -7,8 +7,8 @@ add_executable(FallingSand src/main.cpp
         src/Misc/glad.c
         src/Rendering/Shader.cpp
         src/Rendering/Shader.h
-        src/Game.cpp
-        src/Game.h
+        src/World.cpp
+        src/World.h
         src/Rendering/WorldRenderer.cpp
         src/Rendering/WorldRenderer.h
         src/ElementDefinitions.h

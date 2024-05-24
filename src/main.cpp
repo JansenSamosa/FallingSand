@@ -3,7 +3,7 @@
 #include <glfw3.h>
 
 #include "Engine.h"
-#include "Game.h"
+#include "World.h"
 
 using namespace std;
 using namespace props;
@@ -20,8 +20,8 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    int width = Game::WINDOW_WIDTH;
-    int height = Game::WINDOW_HEIGHT;
+    int width = Engine::WINDOW_WIDTH;
+    int height = Engine::WINDOW_HEIGHT;
 
     GLFWwindow* window = glfwCreateWindow(width, height, "Falling Sand", NULL, NULL);
     if (window == nullptr) {

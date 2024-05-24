@@ -6,10 +6,9 @@
 #define WORLDRENDERER_H
 #include <cstdint>
 
-#include "Shader.h"
+#include "../Engine.h"
 
 // renders a world given some pixel data
-
 class WorldRenderer {
 public:
     WorldRenderer(Shader* shaderProgram);
@@ -24,7 +23,5 @@ private:
 
     Shader* shaderProgram;
 };
-
-
 
 #endif //WORLDRENDERER_H

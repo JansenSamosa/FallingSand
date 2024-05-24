@@ -2,42 +2,34 @@
 // Created by jansensamosa on 5/4/24.
 //
 
-#include "Game.h"
+#include "World.h"
 
 using namespace props;
 
-int Game::BRUSH_SIZE = 5;
-int Game::cursor_pos_x = 10;
-int Game::cursor_pos_y = 10;
-int Game::cursor_pos_prev_x = 10;
-int Game::cursor_pos_prev_y = 10;
-
-Game::Game(Shader &prog) : renderer(WorldRenderer(&prog)) {
+World::World() {
     // initialize world elements;
-    world = new element *[WIDTH];
-    for (int i = 0; i < WIDTH; i++) {
-        world[i] = new element[HEIGHT];
+    world = new element *[Engine::WIDTH];
+    for (int i = 0; i < Engine::WIDTH; i++) {
+        world[i] = new element[Engine::HEIGHT];
     }
-    for (int x = 0; x < WIDTH; x++) {
-        for (int y = 0; y < HEIGHT; y++) {
+    for (int x = 0; x < Engine::WIDTH; x++) {
+        for (int y = 0; y < Engine::HEIGHT; y++) {
             world[x][y] = ELEMENTS_TEMPLATES[SAND_ID];
         }
 
     }
-    buffer = new uint8_t[WIDTH * HEIGHT * 3];
-
-    renderer.Render(getPixelBuffer());
+    buffer = new uint8_t[Engine::WIDTH * Engine::HEIGHT * 3];
 }
 
-Game::~Game() {
-    for (int i = 0; i < WIDTH; ++i) {
+World::~World() {
+    for (int i = 0; i < Engine::WIDTH; ++i) {
         delete[] world[i];
     }
     delete[] world;
     delete buffer;
 }
 
-void Game::MoveLikePowder(int x, int y) {
+void World::MoveLikePowder(int x, int y) {
     int dir = rand() % 2 - 1;
     if (dir == 0) dir = 1;
 
@@ -60,7 +52,7 @@ void Game::MoveLikePowder(int x, int y) {
     }
 }
 
-void Game::MoveLikeLiquid(int x, int y) {
+void World::MoveLikeLiquid(int x, int y) {
     int dir = rand() % 2 - 1;
     if (dir == 0) dir = 1;
 
@@ -105,7 +97,7 @@ void Game::MoveLikeLiquid(int x, int y) {
     tryMoveElement(x, y, spreadDir * spreadAmount, 0);
 }
 
-void Game::MoveLikeGas(int x, int y) {
+void World::MoveLikeGas(int x, int y) {
     int dir = rand() % 2 - 1;
     if (dir == 0) dir = 1;
 
@@ -118,19 +110,19 @@ void Game::MoveLikeGas(int x, int y) {
     }
 }
 
-void Game::UpdateAsSand(int x, int y) {
+void World::UpdateAsSand(int x, int y) {
     MoveLikePowder(x, y);
 }
 
-void Game::UpdateAsWater(int x, int y) {
+void World::UpdateAsWater(int x, int y) {
     MoveLikeLiquid(x, y);
 }
 
-void Game::UpdateAsOil(int x, int y) {
+void World::UpdateAsOil(int x, int y) {
     MoveLikeLiquid(x, y);
 }
 
-void Game::UpdateAsFire(int x, int y) {
+void World::UpdateAsFire(int x, int y) {
     if (hasNeighbor(x, y, WATER_ID)) {
         burnNeighbors(x, y);
         placeElement(x, y, AIR_ID);
@@ -156,14 +148,14 @@ void Game::UpdateAsFire(int x, int y) {
     }
 }
 
-void Game::UpdateAsBurningWood(int x, int y) {
+void World::UpdateAsBurningWood(int x, int y) {
     burnNeighbors(x, y);
     replaceNeighbors(x, y, AIR_ID, FIRE_ID);
 
     updateElementLifetime(x, y);
 }
 
-void Game::UpdateAsSteam(int x, int y) {
+void World::UpdateAsSteam(int x, int y) {
     updateElementLifetime(x, y);
 
     if (world[x][y].lifeTime == 0) {
@@ -174,7 +166,7 @@ void Game::UpdateAsSteam(int x, int y) {
     MoveLikeGas(x, y);
 }
 
-void Game::UpdateAsAcidCloud(int x, int y) {
+void World::UpdateAsAcidCloud(int x, int y) {
     updateElementLifetime(x, y);
 
     if (world[x][y].lifeTime == 0) {
@@ -185,7 +177,7 @@ void Game::UpdateAsAcidCloud(int x, int y) {
     MoveLikeGas(x, y);
 }
 
-void Game::UpdateAsInfiniteSource(int x, int y) {
+void World::UpdateAsInfiniteSource(int x, int y) {
     uint8_t elementID = world[x][y].customData; // element to create
 
     if (elementID == 0) {
@@ -202,7 +194,7 @@ void Game::UpdateAsInfiniteSource(int x, int y) {
     replaceAdjacentNeighbors(x, y, AIR_ID, world[x][y].customData);
 }
 
-void Game::UpdateAsPlant(int x, int y) {
+void World::UpdateAsPlant(int x, int y) {
     if (rand() % 2 == 0) {
         replaceNeighbors(x, y, WATER_ID, PLANT_ID);
         replaceNeighbors(x, y, STEAM_ID, PLANT_ID);
@@ -212,7 +204,7 @@ void Game::UpdateAsPlant(int x, int y) {
     }
 }
 
-void Game::UpdateAsAcid(int x, int y) {
+void World::UpdateAsAcid(int x, int y) {
     if (rand() % 20 < 3) {
         for (int i = 0; i < SIZE_ALWAYS_AT_END; i++) {
             if (i != AIR_ID && i != ACID_ID && i != FIRE_ID && i != INFINITESOURCE_ID && i != ACIDCLOUD_ID) {
@@ -226,7 +218,7 @@ void Game::UpdateAsAcid(int x, int y) {
     MoveLikeLiquid(x, y);
 }
 
-void Game::UpdateAsLava(int x, int y) {
+void World::UpdateAsLava(int x, int y) {
     if (rand() % 25 <= 1 && hasNeighbor(x, y, WATER_ID)) {
         placeElement(x, y, ROCK_ID);
         return;
@@ -248,7 +240,7 @@ void Game::UpdateAsLava(int x, int y) {
     MoveLikeLiquid(x, y);
 }
 
-void Game::UpdateAsGunpowder(int x, int y) {
+void World::UpdateAsGunpowder(int x, int y) {
     if (rand() % 75 <= 1) {
         if (hasNeighbor(x, y, FIRE_ID) || hasNeighbor(x, y, LAVA_ID) || hasNeighbor(x, y, WOODBURNING_ID)) {
             placeExplosion(x, y, rand() % 5 + 10);
@@ -258,7 +250,7 @@ void Game::UpdateAsGunpowder(int x, int y) {
     MoveLikePowder(x, y);
 }
 
-void Game::UpdateAsSalt(int x, int y) {
+void World::UpdateAsSalt(int x, int y) {
     if (rand() % 1 <= 1 && replaceNeighbors(x, y, WATER_ID, SALTWATER_ID)) {
         placeElement(x, y, AIR_ID);
         return;
@@ -267,19 +259,19 @@ void Game::UpdateAsSalt(int x, int y) {
     MoveLikePowder(x, y);
 }
 
-void Game::UpdateAsRock(int x, int y) {
+void World::UpdateAsRock(int x, int y) {
     return;
 }
 
 
 // Public methods
-void Game::Update() {
+void World::Update() {
     gameTime = (gameTime + 1) % 255;
 
     // update elements
-    for (int y = 0; y < HEIGHT; y++) {
+    for (int y = 0; y < Engine::HEIGHT; y++) {
         bool e = y % 2 == 0;
-        for (int x = e ? 0 : WIDTH - 1; e ? x < WIDTH : x >= 0; e ? x++ : x--) {
+        for (int x = e ? 0 : Engine::WIDTH - 1; e ? x < Engine::WIDTH : x >= 0; e ? x++ : x--) {
             element& element = world[x][y];
             if (element.updated) continue;
 
@@ -360,7 +352,7 @@ void Game::Update() {
     }
 }
 
-void Game::updateElementLifetime(int x, int y) {
+void World::updateElementLifetime(int x, int y) {
     int element_id = world[x][y].elementID;
 
     if (gameTime % ELEMENT_DECAY_RATES[element_id] == 0) {
@@ -368,7 +360,7 @@ void Game::updateElementLifetime(int x, int y) {
     }
 }
 
-void Game::placeExplosion(int x, int y, int radius) {
+void World::placeExplosion(int x, int y, int radius) {
     for (int i = -radius + x; i <= radius + x; i++) {
         for (int j = -radius + y; j <= radius + y; j++) {
             bool withinRadius = sqrt((x - i)*(x - i) + (y - j)*(y - j)) <= radius;
@@ -381,9 +373,9 @@ void Game::placeExplosion(int x, int y, int radius) {
 
 }
 
-void Game::brushElement(int x, int y, int radius, int ELEMENT_ID) {
-    int prevX = cursor_pos_prev_x;
-    int prevY = cursor_pos_prev_y;
+void World::brushElement(int x, int y, int radius, int ELEMENT_ID) {
+    int prevX = Engine::cursor_world_position_x_prev;
+    int prevY = Engine::cursor_world_position_y_prev;
 
     double xStep = (x - prevX) / ((radius + 1));
     double yStep = (y - prevY) / ((radius + 1));
@@ -406,7 +398,7 @@ void Game::brushElement(int x, int y, int radius, int ELEMENT_ID) {
     }
 }
 
-bool Game::hasNeighbor(int x, int y, int ELEMENT_ID_NEIGHBOR) {
+bool World::hasNeighbor(int x, int y, int ELEMENT_ID_NEIGHBOR) {
     return (inBounds(x + 1, y    ) && world[x + 1][y].elementID == ELEMENT_ID_NEIGHBOR) ||
     (inBounds(x - 1, y    ) && world[x - 1][ y    ].elementID == ELEMENT_ID_NEIGHBOR) ||
     (inBounds(x, y + 1    ) && world[x][ y + 1    ].elementID == ELEMENT_ID_NEIGHBOR) ||
@@ -417,7 +409,7 @@ bool Game::hasNeighbor(int x, int y, int ELEMENT_ID_NEIGHBOR) {
     (inBounds(x - 1, y + 1) && world[x - 1][ y + 1].elementID == ELEMENT_ID_NEIGHBOR);
 }
 
-uint8_t * Game::getNeighborsIDs(int x, int y) {
+uint8_t * World::getNeighborsIDs(int x, int y) {
     static uint8_t ids[8];
 
     ids[0] = inBounds(x - 1, y) ? world[x - 1][y].elementID : AIR_ID;
@@ -432,7 +424,7 @@ uint8_t * Game::getNeighborsIDs(int x, int y) {
     return ids;
 }
 
-void Game::placeElement(int x, int y, int ELEMENT_ID = AIR_ID) {
+void World::placeElement(int x, int y, int ELEMENT_ID = AIR_ID) {
     if (!inBounds(x, y)) {
         return;
     }
@@ -444,12 +436,12 @@ void Game::placeElement(int x, int y, int ELEMENT_ID = AIR_ID) {
     }
 }
 
-void Game::placeElementDestructively(int x, int y, int ELEMENT_ID) {
+void World::placeElementDestructively(int x, int y, int ELEMENT_ID) {
     placeElement(x, y, ELEMENT_ID);
     world[x][y].updated = false;
 }
 
-bool Game::replaceElementAt(int x, int y, int ELEMENT_ID_FROM, int ELEMENT_ID_TO) {
+bool World::replaceElementAt(int x, int y, int ELEMENT_ID_FROM, int ELEMENT_ID_TO) {
     if (inBounds(x, y) && world[x][y].elementID == ELEMENT_ID_FROM) {
         placeElement(x, y, ELEMENT_ID_TO);
         return true;
@@ -457,7 +449,7 @@ bool Game::replaceElementAt(int x, int y, int ELEMENT_ID_FROM, int ELEMENT_ID_TO
     return false;
 }
 
-bool Game::replaceNeighbors(int x, int y, int ELEMENT_ID_FROM, int ELEMENT_ID_TO) {
+bool World::replaceNeighbors(int x, int y, int ELEMENT_ID_FROM, int ELEMENT_ID_TO) {
     bool replaced = false;
 
     replaced = replaceElementAt(x + 1, y, ELEMENT_ID_FROM, ELEMENT_ID_TO) || replaced;
@@ -472,7 +464,7 @@ bool Game::replaceNeighbors(int x, int y, int ELEMENT_ID_FROM, int ELEMENT_ID_TO
     return replaced;
 }
 
-bool Game::replaceAdjacentNeighbors(int x, int y, int ELEMENT_ID_FROM, int ELEMENT_ID_TO) {
+bool World::replaceAdjacentNeighbors(int x, int y, int ELEMENT_ID_FROM, int ELEMENT_ID_TO) {
     bool replaced = false;
     replaced = replaceElementAt(x + 1, y, ELEMENT_ID_FROM, ELEMENT_ID_TO) || replaced;
     replaced = replaceElementAt(x - 1, y, ELEMENT_ID_FROM, ELEMENT_ID_TO) || replaced;
@@ -482,7 +474,7 @@ bool Game::replaceAdjacentNeighbors(int x, int y, int ELEMENT_ID_FROM, int ELEME
     return replaced;
 }
 
-void Game::burnNeighbors(int x, int y) {
+void World::burnNeighbors(int x, int y) {
     if(rand() % 5 < 2) return;
     replaceNeighbors(x, y, WOOD_ID, WOODBURNING_ID);
     replaceNeighbors(x, y, WATER_ID, STEAM_ID);
@@ -492,7 +484,7 @@ void Game::burnNeighbors(int x, int y) {
     replaceNeighbors(x, y, ACID_ID, ACIDCLOUD_ID);
 }
 
-bool Game::canMoveTo(int x, int y, int x2, int y2) {
+bool World::canMoveTo(int x, int y, int x2, int y2) {
     if (!inBounds(x,y) || !inBounds(x2, y2)) return false;
 
     uint8_t density1 = ELEMENT_DENSITIES[world[x][y].elementID];
@@ -508,15 +500,15 @@ bool Game::canMoveTo(int x, int y, int x2, int y2) {
     return  density1 < density2;
 }
 
-bool Game::isEmpty(int x, int y) {
+bool World::isEmpty(int x, int y) {
     return world[x][y].elementID == AIR_ID;
 }
 
-bool Game::inBounds(int x, int y) {
-    return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
+bool World::inBounds(int x, int y) {
+    return x >= 0 && x < Engine::WIDTH && y >= 0 && y < Engine::HEIGHT;
 }
 
-void Game::swapElement(int x1, int y1, int x2, int y2) {
+void World::swapElement(int x1, int y1, int x2, int y2) {
     if (!inBounds(x1, y1) || !inBounds(x2, y2)) {
         cout << "not in bounds!" << endl;
         return;
@@ -527,7 +519,7 @@ void Game::swapElement(int x1, int y1, int x2, int y2) {
 }
 
 // returns false if cannot move, returns true if successfully does
-bool Game::tryMoveElement(int x, int y, int dx, int dy) {
+bool World::tryMoveElement(int x, int y, int dx, int dy) {
     if (canMoveTo(x, y, x + dx, y + dy)) {
         swapElement(x, y, x + dx, y + dy);
 
@@ -536,13 +528,9 @@ bool Game::tryMoveElement(int x, int y, int dx, int dy) {
     return false;
 }
 
-void Game::Render() {
-    renderer.Render(getPixelBuffer());
-}
-
-uint8_t * Game::getPixelBuffer() {
-    for (int x = 0; x < WIDTH; x++) {
-        for (int y = HEIGHT - 1; y >= 0; y--) {
+uint8_t * World::getPixelBuffer() {
+    for (int x = 0; x < Engine::WIDTH; x++) {
+        for (int y = Engine::HEIGHT - 1; y >= 0; y--) {
             updatePixel(x, y);
         }
     }
@@ -550,7 +538,7 @@ uint8_t * Game::getPixelBuffer() {
     return buffer;
 }
 
-void Game::updatePixel(int x, int y) {
+void World::updatePixel(int x, int y) {
     world[x][y].updated = false; // for the next timestep
 
     Color color = ELEMENTS_COLORS[world[x][y].elementID];
@@ -559,15 +547,17 @@ void Game::updatePixel(int x, int y) {
 
     }
 
-    int mouseDist = sqrt((cursor_pos_x - x)*(cursor_pos_x - x) + (cursor_pos_y - y) * (cursor_pos_y - y));
-    if (mouseDist == BRUSH_SIZE || mouseDist == 0) {
+    int mouseDist = sqrt((Engine::cursor_world_position_x - x)*(Engine::cursor_world_position_x - x) +
+        (Engine::cursor_world_position_y - y) * (Engine::cursor_world_position_y - y));
+
+    if (mouseDist == Engine::brush_size || mouseDist == 0) {
         color.r = min(color.r + 100,255);
         color.g = min(color.g + 100,255);
         color.b = min(color.b + 100,255);
     }
 
 
-    int index = y * WIDTH * 3 + x * 3;
+    int index = y * Engine::WIDTH * 3 + x * 3;
 
     buffer[index] = color.r;
     buffer[index + 1] = color.g;

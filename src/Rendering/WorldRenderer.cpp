@@ -4,8 +4,6 @@
 
 #include "WorldRenderer.h"
 
-#include "../Game.h"
-
 WorldRenderer::WorldRenderer(Shader *shaderProgram) : shaderProgram(shaderProgram){
     float vertices[] = {
         // positions   // texture coords
@@ -47,13 +45,13 @@ WorldRenderer::WorldRenderer(Shader *shaderProgram) : shaderProgram(shaderProgra
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    uint8_t* empty;
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Game::WIDTH, Game::HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, empty);
+    uint8_t* empty = new uint8_t[Engine::WIDTH * Engine::HEIGHT * 3];
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Engine::WIDTH, Engine::HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, empty);
+    delete empty;
 }
 
 void WorldRenderer::Render(uint8_t *pixelDataBuffer) {
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Game::WIDTH, Game::HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixelDataBuffer);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Engine::WIDTH, Engine::HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixelDataBuffer);
     shaderProgram->use();
     glBindVertexArray(renderPlaneID);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

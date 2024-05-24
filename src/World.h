@@ -10,39 +10,20 @@
 #include <random>
 
 #include "ElementDefinitions.h"
+#include "Engine.h"
 #include "Rendering/Shader.h"
-#include "Rendering/WorldRenderer.h"
 
-
-class Game {
+class World {
 public:
-    // game parameters
-    static constexpr int WINDOW_WIDTH = 1600;
-    static constexpr int WINDOW_HEIGHT = 900;
-    static constexpr int WIDTH =   (WINDOW_WIDTH/10)*10;
-    static constexpr int HEIGHT = (WINDOW_HEIGHT/10)*10;
-    static constexpr double TIMESTEP = 0.02;
-
-    static int BRUSH_SIZE;
-    static int cursor_pos_x;
-    static int cursor_pos_y;
-    static int cursor_pos_prev_x;
-    static int cursor_pos_prev_y;
-
-    static void set_brush_size(int size) {BRUSH_SIZE = size; }
-    static int get_brush_size() {return BRUSH_SIZE;}
-
-    Game(Shader &prog);
+    World();
+    ~World();
 
     void Update();
-    void Render();
     void brushElement(int x, int y, int radius, int ELEMENT_ID);
 
-    ~Game();
+    uint8_t* getPixelBuffer();
 
 private:
-    WorldRenderer renderer;
-
     props::element** world;
     uint8_t* buffer;
 
@@ -91,7 +72,6 @@ private:
     void swapElement(int x1, int y1, int x2, int y2);
     bool tryMoveElement(int x, int y, int dx, int dy);
 
-    uint8_t* getPixelBuffer();
     void updatePixel(int x, int y);
 };
 
