@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 
+
 using namespace props;
 
 const int Engine::MAX_BRUSH_SIZE = 250;
@@ -18,11 +19,12 @@ int Engine::cursor_world_position_y_prev = 0;
 
 bool Engine::pressing_left_click = false;
 
-Engine::Engine(GLFWwindow *glfwWindow, Shader *worldShader) :
-    window(glfwWindow), worldShader(worldShader)
+Engine::Engine(GLFWwindow *glfwWindow, Shader *worldShader,Shader *UIShader) :
+    window(glfwWindow), worldShader(worldShader), UIObjectShader(UIShader)
 {
     game = new World();
     worldRenderer = new WorldRenderer(worldShader);
+    uiElementRenderer = new UIElementRenderer(UIShader);
 
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -30,6 +32,14 @@ Engine::Engine(GLFWwindow *glfwWindow, Shader *worldShader) :
 }
 
 void Engine::RunEngine() {
+    UIRenderableFromFile container {"assets/container.jpg"};
+    container.set_scale(glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.1, 1)));
+    container.set_viewport_position(glm::translate(glm::mat4(1.0f), glm::vec3(-0.5, 0, 0)));
+
+    UIRenderableFromFile container2 {"assets/wall.jpg"};
+    container2.set_scale(glm::scale(glm::mat4(1.0f), glm::vec3(0.2, 0.1, 1)));
+    container2.set_viewport_position(glm::translate(glm::mat4(1.0f), glm::vec3(0.4, .25, 0)));
+
     double lastTime = 0;
     while(!glfwWindowShouldClose(window)) {
         processInput();
@@ -46,6 +56,8 @@ void Engine::RunEngine() {
 
         glClear(GL_COLOR_BUFFER_BIT);
         worldRenderer->Render(game->getPixelBuffer());
+        uiElementRenderer->RenderElement(container);
+        uiElementRenderer->RenderElement(container2);
 
         showFPS();
         int error = glGetError();
@@ -187,4 +199,5 @@ void Engine::cursor_position_callback(GLFWwindow* window, double xPos, double yP
 Engine::~Engine() {
     delete game;
     delete worldRenderer;
+    delete uiElementRenderer;
 }

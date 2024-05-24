@@ -14,7 +14,7 @@ World::World() {
     }
     for (int x = 0; x < Engine::WIDTH; x++) {
         for (int y = 0; y < Engine::HEIGHT; y++) {
-            world[x][y] = ELEMENTS_TEMPLATES[SAND_ID];
+            world[x][y] = ELEMENTS_TEMPLATES[AIR_ID];
         }
 
     }

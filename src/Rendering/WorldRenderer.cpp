@@ -51,6 +51,7 @@ WorldRenderer::WorldRenderer(Shader *shaderProgram) : shaderProgram(shaderProgra
 }
 
 void WorldRenderer::Render(uint8_t *pixelDataBuffer) {
+    glBindTexture(GL_TEXTURE_2D, gameTextureID);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, Engine::WIDTH, Engine::HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixelDataBuffer);
     shaderProgram->use();
     glBindVertexArray(renderPlaneID);

@@ -40,8 +40,9 @@ int main()
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    Shader shader("assets/vertShader.glsl", "assets/fragShader.glsl");
-    Engine engine {window, &shader};
+    Shader worldShader("assets/vertShader.glsl", "assets/fragShader.glsl");
+    Shader UIShader("assets/vertShaderUIElement.glsl", "assets/fragShaderUIElement.glsl");
+    Engine engine {window, &worldShader, &UIShader};
     engine.RunEngine();
 
     glfwTerminate();

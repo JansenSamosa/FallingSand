@@ -14,6 +14,12 @@ add_executable(FallingSand src/main.cpp
         src/ElementDefinitions.h
         src/Engine.cpp
         src/Engine.h
+        src/Rendering/UIElementRenderer.cpp
+        src/Rendering/UIElementRenderer.h
+        src/Misc/stb_image.cpp
+        src/Misc/stb_image.cpp
+        src/Rendering/UIRenderable.h
+        src/Rendering/UIRenderable.cpp
 )
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})

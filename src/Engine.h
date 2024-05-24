@@ -10,6 +10,7 @@
 #include <glfw3.h>
 #include "World.h"
 #include "Rendering/Shader.h"
+#include "Rendering/UIElementRenderer.h"
 #include "Rendering/WorldRenderer.h"
 
 class World;
@@ -38,7 +39,7 @@ public:
     static int cursor_world_position_y_prev;
     static bool pressing_left_click;
 
-    Engine(GLFWwindow* glfwWindow, Shader* worldShader);
+    Engine(GLFWwindow* glfwWindow, Shader* worldShader, Shader* UIShader);
 
     void RunEngine();
 
@@ -46,6 +47,7 @@ public:
 private:
     World* game;
     WorldRenderer* worldRenderer;
+    UIElementRenderer* uiElementRenderer;
 
     GLFWwindow* window;
     Shader* worldShader;
