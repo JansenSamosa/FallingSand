@@ -5,13 +5,13 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <random>
 #include <algorithm>
 #include <cmath>
+#include <random>
 
 #include "ElementDefinitions.h"
-#include "Shader.h"
-#include "WorldRenderer.h"
+#include "Rendering/Shader.h"
+#include "Rendering/WorldRenderer.h"
 
 
 class Game {

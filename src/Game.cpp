@@ -13,19 +13,18 @@ int Game::cursor_pos_prev_x = 10;
 int Game::cursor_pos_prev_y = 10;
 
 Game::Game(Shader &prog) : renderer(WorldRenderer(&prog)) {
+    // initialize world elements;
     world = new element *[WIDTH];
-    buffer = new uint8_t[WIDTH * HEIGHT * 3];
-
     for (int i = 0; i < WIDTH; i++) {
         world[i] = new element[HEIGHT];
     }
-
-    set_brush_size(5);
     for (int x = 0; x < WIDTH; x++) {
         for (int y = 0; y < HEIGHT; y++) {
-            world[x][y] = ELEMENTS_TEMPLATES[AIR_ID];
+            world[x][y] = ELEMENTS_TEMPLATES[SAND_ID];
         }
+
     }
+    buffer = new uint8_t[WIDTH * HEIGHT * 3];
 
     renderer.Render(getPixelBuffer());
 }
@@ -42,14 +41,7 @@ void Game::MoveLikePowder(int x, int y) {
     int dir = rand() % 2 - 1;
     if (dir == 0) dir = 1;
 
-    int vel = world[x][y].verticalVelocity - 100;
-
     uint8_t maxVel = gameTime % 1 == 0 ? world[x][y].verticalVelocity + 1 : world[x][y].verticalVelocity;
-    //uint8_t maxVel = min(world[x][y].verticalVelocity + 1, 20);
-
-    //if (gameTime % 4 == 0 && (hasNeighbor(x, y, WATER_ID) || hasNeighbor(x, y, SALTWATER_ID))) {
-    //    maxVel -= 2;
-    //}
 
     world[x][y].verticalVelocity = 0;
     bool stopped = false;
@@ -66,18 +58,13 @@ void Game::MoveLikePowder(int x, int y) {
             stopped = true;
         }
     }
-
-    //tryMoveElement(x, y, 0, -1);
-    //tryMoveElement(x, y, 1, -1);
 }
 
 void Game::MoveLikeLiquid(int x, int y) {
     int dir = rand() % 2 - 1;
     if (dir == 0) dir = 1;
 
-
     uint8_t maxVel = gameTime % 1 == 0 ? world[x][y].verticalVelocity + 1 : world[x][y].verticalVelocity;
-    //uint8_t maxVel = min(world[x][y].verticalVelocity + 1, 20);
 
     world[x][y].verticalVelocity = 0;
     bool stopped = false;

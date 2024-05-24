@@ -4,7 +4,7 @@
 
 #include "WorldRenderer.h"
 
-#include "Game.h"
+#include "../Game.h"
 
 WorldRenderer::WorldRenderer(Shader *shaderProgram) : shaderProgram(shaderProgram){
     float vertices[] = {

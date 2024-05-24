@@ -4,14 +4,16 @@ project(FallingSand)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(FallingSand src/main.cpp
-        src/glad.c
-        src/Shader.cpp
-        src/Shader.h
+        src/Misc/glad.c
+        src/Rendering/Shader.cpp
+        src/Rendering/Shader.h
         src/Game.cpp
         src/Game.h
-        src/WorldRenderer.cpp
-        src/WorldRenderer.h
+        src/Rendering/WorldRenderer.cpp
+        src/Rendering/WorldRenderer.h
         src/ElementDefinitions.h
+        src/Engine.cpp
+        src/Engine.h
 )
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
