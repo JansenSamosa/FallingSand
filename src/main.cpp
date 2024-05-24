@@ -5,7 +5,7 @@
 #include "Game.h"
 
 using namespace std;
-
+using namespace props;
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
@@ -19,8 +19,8 @@ void showFPS(GLFWwindow *pWindow)
     double currentTime = glfwGetTime();
     double delta = currentTime - lastTime;
     nbFrames++;
-    if ( delta >= 1.0 ){ // If last cout was more than 1 sec ago
-        cout << 1000.0/double(nbFrames) << endl;
+    if ( delta >= 1.0 ){ // If last std::cout was more than 1 sec ago
+        std::cout << 1000.0/double(nbFrames) << std::endl;
 
         double fps = double(nbFrames) / delta;
 
@@ -162,14 +162,14 @@ int main()
 
     GLFWwindow* window = glfwCreateWindow(width, height, "Falling Sand", NULL, NULL);
     if (window == nullptr) {
-        cout << "Failed to initialize GLFW window." << endl;
+        std::cout << "Failed to initialize GLFW window." << std::endl;
         glfwTerminate();
         return -1;
     }
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        cout << "Failed to initialize GLAD" << endl;
+        std::cout << "Failed to initialize GLAD" << std::endl;
         glfwTerminate();
         return -1;
     }
@@ -207,7 +207,7 @@ int main()
         showFPS(window);
         int error = glGetError();
         if (error != 0) {
-            cout << "OPENGL_ERROR_CODE::" << error << endl;
+            std::cout << "OPENGL_ERROR_CODE::" << error << std::endl;
         }
 
         glfwSwapBuffers(window);

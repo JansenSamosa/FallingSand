@@ -77,8 +77,8 @@ build CMakeFiles/FallingSand.dir/src/Game.cpp.o: CXX_COMPILER__FallingSand_unsca
   OBJECT_DIR = CMakeFiles/FallingSand.dir
   OBJECT_FILE_DIR = CMakeFiles/FallingSand.dir/src
 
-build CMakeFiles/FallingSand.dir/src/World.cpp.o: CXX_COMPILER__FallingSand_unscanned_Debug /home/jansensamosa/Projects/learnOpenGL/Projects/FallingSand/src/World.cpp || cmake_object_order_depends_target_FallingSand
-  DEP_FILE = CMakeFiles/FallingSand.dir/src/World.cpp.o.d
+build CMakeFiles/FallingSand.dir/src/WorldRenderer.cpp.o: CXX_COMPILER__FallingSand_unscanned_Debug /home/jansensamosa/Projects/learnOpenGL/Projects/FallingSand/src/WorldRenderer.cpp || cmake_object_order_depends_target_FallingSand
+  DEP_FILE = CMakeFiles/FallingSand.dir/src/WorldRenderer.cpp.o.d
   FLAGS = -g -fdiagnostics-color=always
   INCLUDES = -I/home/jansensamosa/Projects/learnOpenGL/Libraries/Include -isystem /home/linuxbrew/.linuxbrew/include
   OBJECT_DIR = CMakeFiles/FallingSand.dir
@@ -92,7 +92,7 @@ build CMakeFiles/FallingSand.dir/src/World.cpp.o: CXX_COMPILER__FallingSand_unsc
 #############################################
 # Link the executable FallingSand
 
-build FallingSand: CXX_EXECUTABLE_LINKER__FallingSand_Debug CMakeFiles/FallingSand.dir/src/main.cpp.o CMakeFiles/FallingSand.dir/src/glad.c.o CMakeFiles/FallingSand.dir/src/Shader.cpp.o CMakeFiles/FallingSand.dir/src/Game.cpp.o CMakeFiles/FallingSand.dir/src/World.cpp.o | /home/linuxbrew/.linuxbrew/lib/libglfw.so.3.4
+build FallingSand: CXX_EXECUTABLE_LINKER__FallingSand_Debug CMakeFiles/FallingSand.dir/src/main.cpp.o CMakeFiles/FallingSand.dir/src/glad.c.o CMakeFiles/FallingSand.dir/src/Shader.cpp.o CMakeFiles/FallingSand.dir/src/Game.cpp.o CMakeFiles/FallingSand.dir/src/WorldRenderer.cpp.o | /home/linuxbrew/.linuxbrew/lib/libglfw.so.3.4
   FLAGS = -g
   LINK_LIBRARIES = -Wl,-rpath,/home/linuxbrew/.linuxbrew/lib  /home/linuxbrew/.linuxbrew/lib/libglfw.so.3.4  -lOpenGL
   OBJECT_DIR = CMakeFiles/FallingSand.dir

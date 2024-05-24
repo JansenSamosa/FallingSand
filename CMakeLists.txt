@@ -9,8 +9,9 @@ add_executable(FallingSand src/main.cpp
         src/Shader.h
         src/Game.cpp
         src/Game.h
-        src/World.cpp
-        src/World.h
+        src/WorldRenderer.cpp
+        src/WorldRenderer.h
+        src/ElementDefinitions.h
 )
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})

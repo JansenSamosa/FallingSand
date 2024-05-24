@@ -4,18 +4,21 @@
 
 #include "Game.h"
 
+using namespace props;
+
 int Game::BRUSH_SIZE = 5;
 int Game::cursor_pos_x = 10;
 int Game::cursor_pos_y = 10;
 int Game::cursor_pos_prev_x = 10;
 int Game::cursor_pos_prev_y = 10;
 
-Game::Game(Shader &prog) : shaderProgram(prog) {
+Game::Game(Shader &prog) : renderer(WorldRenderer(&prog)) {
     world = new element *[WIDTH];
+    buffer = new uint8_t[WIDTH * HEIGHT * 3];
+
     for (int i = 0; i < WIDTH; i++) {
         world[i] = new element[HEIGHT];
     }
-
 
     set_brush_size(5);
     for (int x = 0; x < WIDTH; x++) {
@@ -23,47 +26,8 @@ Game::Game(Shader &prog) : shaderProgram(prog) {
             world[x][y] = ELEMENTS_TEMPLATES[AIR_ID];
         }
     }
-    float vertices[] = {
-        // positions   // texture coords
-        -1.0f,  1.0f,  0.0f, 1.0f, // top left
-        -1.0f, -1.0f,  0.0f, 0.0f, // bottom left
-         1.0f, -1.0f,  1.0f, 0.0f, // bottom right
-         1.0f,  1.0f,  1.0f, 1.0f  // top right
-    };
-    unsigned int indices[] = {
-        0, 1, 2, // first triangle
-        0, 2, 3  // second triangle
-    };
 
-    //Vertices
-    glGenVertexArrays(1, &renderPlaneID);
-    unsigned int EBO;
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(renderPlaneID);
-    glBindBuffer(GL_ARRAY_BUFFER,VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // Texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    //Texture
-    glGenTextures(1, &gameTextureID);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, gameTextureID);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, getPixelBuffer());
+    renderer.Render(getPixelBuffer());
 }
 
 Game::~Game() {
@@ -71,6 +35,7 @@ Game::~Game() {
         delete[] world[i];
     }
     delete[] world;
+    delete buffer;
 }
 
 void Game::MoveLikePowder(int x, int y) {
@@ -585,10 +550,7 @@ bool Game::tryMoveElement(int x, int y, int dx, int dy) {
 }
 
 void Game::Render() {
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, getPixelBuffer());
-    shaderProgram.use();
-    glBindVertexArray(renderPlaneID);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    renderer.Render(getPixelBuffer());
 }
 
 uint8_t * Game::getPixelBuffer() {
