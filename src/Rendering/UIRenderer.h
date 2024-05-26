@@ -11,13 +11,13 @@
 #include "Shader.h"
 #include "UIRenderable.h"
 
-class UIElementRenderer {
+class UIRenderer {
 public:
-    UIElementRenderer(Shader* UIShaderProgram);
+    UIRenderer(Shader* UIShaderProgram);
 
     void RenderElement(UIRenderable& renderable) const;
 
-    ~UIElementRenderer();
+    ~UIRenderer();
 private:
     unsigned int VAO {};
     Shader* shader;

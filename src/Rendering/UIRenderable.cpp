@@ -10,7 +10,9 @@
 #include <glad/glad.h>
 
 
-UIRenderableFromFile::UIRenderableFromFile(std::string filepath) {
+UIRenderableFromFile::UIRenderableFromFile(std::string filepath) :
+    color(props::Color(255, 255, 255))
+{
     glGenTextures(1, &textureID);
 
     glActiveTexture(GL_TEXTURE0); // activate texture unit 0 before binding
@@ -37,10 +39,6 @@ void UIRenderableFromFile::bindTextureToBeRendered() {
     glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
-
-UIRenderableFromFile::~UIRenderableFromFile() {
-}
-
 // getters and setters
 glm::mat4 UIRenderableFromFile::get_viewport_position() {
     return viewportPosition;
@@ -52,6 +50,14 @@ glm::mat4 UIRenderableFromFile::get_scale() {
 
 void UIRenderableFromFile::set_viewport_position(const glm::mat4 &viewport_position) {
     viewportPosition = viewport_position;
+}
+
+props::Color UIRenderableFromFile::get_color() {
+    return color;
+}
+
+void UIRenderableFromFile::set_color(props::Color color) {
+    this->color = color;
 }
 
 void UIRenderableFromFile::set_scale(const glm::mat4 &scale) {

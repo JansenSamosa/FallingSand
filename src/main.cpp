@@ -39,6 +39,7 @@ int main()
 
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     Shader worldShader("assets/vertShader.glsl", "assets/fragShader.glsl");
     Shader UIShader("assets/vertShaderUIElement.glsl", "assets/fragShaderUIElement.glsl");

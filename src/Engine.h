@@ -8,21 +8,25 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <glfw3.h>
+
+#include "UIButton.h"
 #include "World.h"
 #include "Rendering/Shader.h"
-#include "Rendering/UIElementRenderer.h"
+#include "Rendering/UIRenderer.h"
 #include "Rendering/WorldRenderer.h"
 
 class World;
 class WorldRenderer;
+class UIButtonSwitchElement;
 
 class Engine {
 public:
     // game parameters
     static constexpr int WINDOW_WIDTH = 1600;
     static constexpr int WINDOW_HEIGHT = 900;
-    static constexpr int WIDTH =   (WINDOW_WIDTH/10)*10;
-    static constexpr int HEIGHT = (WINDOW_HEIGHT/10)*10;
+    static constexpr int WIDTH =   (WINDOW_WIDTH/10)*5;
+    static constexpr int HEIGHT = (WINDOW_HEIGHT/10)*5;
+
     static constexpr double TIMESTEP = 0.02;
 
     static const int MAX_BRUSH_SIZE;
@@ -37,6 +41,8 @@ public:
     static int cursor_world_position_y;
     static int cursor_world_position_x_prev;
     static int cursor_world_position_y_prev;
+    static int cursor_viewport_position_x;
+    static int cursor_viewport_position_y;
     static bool pressing_left_click;
 
     Engine(GLFWwindow* glfwWindow, Shader* worldShader, Shader* UIShader);
@@ -47,11 +53,13 @@ public:
 private:
     World* game;
     WorldRenderer* worldRenderer;
-    UIElementRenderer* uiElementRenderer;
+    UIRenderer* uiElementRenderer;
 
     GLFWwindow* window;
     Shader* worldShader;
     Shader* UIObjectShader;
+
+    //  std::vector<UIButtonSwitchElement*> switchElementButtons;
 
     // fps counter
     double lastTime;
@@ -60,9 +68,11 @@ private:
 
     //INPUT
     void processInput();
-
     static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
     static void cursor_position_callback(GLFWwindow* window, double xPos, double yPos);
+
+    //UI
+    void initializeSwitchElementButtons();
 };
 
 

@@ -42,7 +42,7 @@ namespace props {
 
     enum elements { AIR_ID, SAND_ID, WATER_ID, OIL_ID, DIRT_ID, FIRE_ID, WOOD_ID, WOODBURNING_ID, STEAM_ID,
         INFINITESOURCE_ID, PLANT_ID, ACID_ID, LAVA_ID, GUNPOWDER_ID, ROCK_ID, SALT_ID, SALTWATER_ID, ACIDCLOUD_ID,
-        SIZE_ALWAYS_AT_END};
+        NUM_OF_ELEMENTS};
     const uint8_t ELEMENT_DENSITIES[] = {2, 10, 5, 4, 10, 1, 255, 255, 1, 255, 255, 5, 6, 10, 255, 10, 6, 1};
     const uint8_t ELEMENT_VISCOSITIES[] = {0, 0, 4, 6, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 4, 0};
     const uint8_t ELEMENT_DECAY_RATES[] = {1, 1, 1, 1, 1, 1, 1, 2, 8, 1, 1, 1, 1, 1, 1, 1, 1, 8};

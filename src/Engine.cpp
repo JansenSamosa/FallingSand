@@ -4,6 +4,8 @@
 
 #include "Engine.h"
 
+#include "UIButton.h"
+
 
 using namespace props;
 
@@ -16,36 +18,65 @@ int Engine::cursor_world_position_x = 0;
 int Engine::cursor_world_position_y = 0;
 int Engine::cursor_world_position_x_prev = 0;
 int Engine::cursor_world_position_y_prev = 0;
+int Engine::cursor_viewport_position_x = 0;
+int Engine::cursor_viewport_position_y = 0;
 
 bool Engine::pressing_left_click = false;
 
 Engine::Engine(GLFWwindow *glfwWindow, Shader *worldShader,Shader *UIShader) :
     window(glfwWindow), worldShader(worldShader), UIObjectShader(UIShader)
 {
+
     game = new World();
     worldRenderer = new WorldRenderer(worldShader);
-    uiElementRenderer = new UIElementRenderer(UIShader);
+    uiElementRenderer = new UIRenderer(UIShader);
+
+    initializeSwitchElementButtons();
 
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetScrollCallback(window, scroll_callback);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
 void Engine::RunEngine() {
-    UIRenderableFromFile container {"assets/container.jpg"};
-    container.set_scale(glm::scale(glm::mat4(1.0f), glm::vec3(0.1, 0.1, 1)));
-    container.set_viewport_position(glm::translate(glm::mat4(1.0f), glm::vec3(-0.5, 0, 0)));
+    //UIButtonSwitchElement btn {&renderable, WATER_ID};
+    //btn.setPosition( 50, WINDOW_HEIGHT - 50);
+    //btn.setSize(50, 50);
 
-    UIRenderableFromFile container2 {"assets/wall.jpg"};
-    container2.set_scale(glm::scale(glm::mat4(1.0f), glm::vec3(0.2, 0.1, 1)));
-    container2.set_viewport_position(glm::translate(glm::mat4(1.0f), glm::vec3(0.4, .25, 0)));
+    std::vector<UIButtonSwitchElement> switchElementButtons(NUM_OF_ELEMENTS - 2);
+    int btnIndex = 0;
+    for (int i = 0; i < NUM_OF_ELEMENTS; i++) {
+        if (i == SALTWATER_ID || i == WOODBURNING_ID) {
+            continue;
+        }
+
+        UIRenderableFromFile* renderable  = new UIRenderableFromFile("assets/elementselectortemplate.jpg");
+        renderable->set_color(ELEMENTS_COLORS[i]);
+        // OWNERSHIP OF RENDERABLE GIVEN TO THE THIS BUTTON
+        switchElementButtons[btnIndex].setRenderable(renderable);
+        switchElementButtons[btnIndex].setElementID(i);
+        switchElementButtons[btnIndex].setPosition( 50 * (btnIndex + 1) - 25, WINDOW_HEIGHT - 25);
+        switchElementButtons[btnIndex].setSize(40, 40);
+
+        btnIndex++;
+    }
 
     double lastTime = 0;
     while(!glfwWindowShouldClose(window)) {
         processInput();
 
         if (pressing_left_click) {
-            game->brushElement(cursor_world_position_x, cursor_world_position_y, brush_size, selected_element);
+            bool clickedBtn = false;
+            for (int i = 0; i < switchElementButtons.size(); i++) {
+                UIButtonSwitchElement btn = switchElementButtons[i];
+                if (btn.positionInBounds(cursor_viewport_position_x, cursor_viewport_position_y)) {
+                    btn.onClick();
+                    clickedBtn = true;
+                }
+            }
+
+            if (!clickedBtn) {
+                game->brushElement(cursor_world_position_x, cursor_world_position_y, brush_size, selected_element);
+            }
         }
 
         double currentTime = glfwGetTime();
@@ -56,8 +87,11 @@ void Engine::RunEngine() {
 
         glClear(GL_COLOR_BUFFER_BIT);
         worldRenderer->Render(game->getPixelBuffer());
-        uiElementRenderer->RenderElement(container);
-        uiElementRenderer->RenderElement(container2);
+
+        for (int i = 0; i < switchElementButtons.size(); i++) {
+            UIButtonSwitchElement& btn = switchElementButtons[i];
+            uiElementRenderer->RenderElement(*btn.getRenderable());
+        }
 
         showFPS();
         int error = glGetError();
@@ -88,6 +122,16 @@ void Engine::showFPS() {
         nbFrames = 0;
         lastTime = currentTime;
     }
+}
+
+void Engine::initializeSwitchElementButtons() {
+    //UIRenderableFromFile renderable ("assets/waterbtn.jpg");
+    //for (int i = 0; i < 1; i++) {
+    //    UIButtonSwitchElement* btn  = new UIButtonSwitchElement(&renderable, i);
+    //    switchElementButtons.emplace_back(btn);
+    //    switchElementButtons[i]->setPosition( 50 * i, WINDOW_HEIGHT - 50);
+    //    switchElementButtons[i]->setSize(50, 50);
+    //}
 }
 
 void Engine::processInput() {
@@ -188,7 +232,10 @@ void Engine::cursor_position_callback(GLFWwindow* window, double xPos, double yP
     yPos *= -1;
     yPos += (double) WINDOW_HEIGHT / 2;
 
-    // scale positions to texture positions
+    cursor_viewport_position_x = (int) xPos;
+    cursor_viewport_position_y = (int) yPos;
+
+    // scale positions to world/texture positions
     xPos *= (double) WIDTH / WINDOW_WIDTH;
     yPos *= (double) HEIGHT / WINDOW_HEIGHT;
 

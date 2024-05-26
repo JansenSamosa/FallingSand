@@ -206,7 +206,7 @@ void World::UpdateAsPlant(int x, int y) {
 
 void World::UpdateAsAcid(int x, int y) {
     if (rand() % 20 < 3) {
-        for (int i = 0; i < SIZE_ALWAYS_AT_END; i++) {
+        for (int i = 0; i < NUM_OF_ELEMENTS; i++) {
             if (i != AIR_ID && i != ACID_ID && i != FIRE_ID && i != INFINITESOURCE_ID && i != ACIDCLOUD_ID) {
                 if (replaceNeighbors(x, y, i, AIR_ID)) {
                     placeElement(x, y, AIR_ID);
