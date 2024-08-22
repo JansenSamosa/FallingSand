@@ -22,8 +22,8 @@ class UIButtonSwitchElement;
 class Engine {
 public:
     // game parameters
-    static constexpr int WINDOW_WIDTH = 1600;
-    static constexpr int WINDOW_HEIGHT = 900;
+    static constexpr int WINDOW_WIDTH = 1920;
+    static constexpr int WINDOW_HEIGHT = 1050;
     static constexpr int WIDTH =   (WINDOW_WIDTH/10)*5;
     static constexpr int HEIGHT = (WINDOW_HEIGHT/10)*5;
 

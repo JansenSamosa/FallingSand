@@ -1,0 +1,3 @@
+/home/jansensamosa/Projects/learnOpenGL/Projects/FallingSand/cmake-build-release/CMakeFiles/FallingSand.dir
+/home/jansensamosa/Projects/learnOpenGL/Projects/FallingSand/cmake-build-release/CMakeFiles/edit_cache.dir
+/home/jansensamosa/Projects/learnOpenGL/Projects/FallingSand/cmake-build-release/CMakeFiles/rebuild_cache.dir

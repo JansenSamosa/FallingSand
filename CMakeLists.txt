@@ -26,7 +26,7 @@ add_executable(FallingSand src/main.cpp
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 
-include_directories("/home/jansensamosa/Projects/learnOpenGL/Libraries/Include")
+include_directories("Libraries/Include")
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
