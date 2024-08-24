@@ -1,3 +1,4 @@
+Note: If you wish you compile and run the application from source, make sure you have OpenGL and GLFW3 packages installed on your system. I have only tested the application on Linux Fedora, so running it on Windows or MacOS may require manually downloading the [GLFW](https://www.glfw.org/download.html) binaries for your system, and copying it into the Libraries/Libs folder in the provided project files.
 ![ezgif-6-ee3e867b44](https://github.com/user-attachments/assets/cabb56d6-9c1c-405f-baed-26d76e4006ef)
 
 ---
