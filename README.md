@@ -1,6 +1,6 @@
 Hi! This is a game I made inspired by the classic "Falling Sand" game which you can find more information about [here](https://boredhumans.com/falling_sand.php). If you  don't want to click that link - essentially it's a particle simulation game that uses cellular automata to create complex and emergent interactions between different elements (such as sand, water, fire, acid, and more), from simple rulesets.
 
-Note: If you wish you compile and run the application from source, make sure you have OpenGL and GLFW3 packages installed on your system. I have only tested the application on Linux Fedora, so running it on Windows or MacOS may require modifying the makefile for the project to properly reference your system's pacakages.
+Note: If you wish you compile and run the application from source, make sure you have OpenGL and GLFW3 packages installed on your system. I have only tested the application on Linux Fedora, so running it on Windows or MacOS may require modifying the makefile for the project to properly reference your system's packages.
 
 ![ezgif-6-ee3e867b44](https://github.com/user-attachments/assets/cabb56d6-9c1c-405f-baed-26d76e4006ef)
 
